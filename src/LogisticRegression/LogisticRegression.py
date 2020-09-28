@@ -66,7 +66,7 @@ def train(train_set, train_labels, validation_set, validation_labels, momentum=0
 
         # Check if we have converged
         if prev_validation_cost is not None and abs(prev_validation_cost - validation_cost) < epsilon:
-            print("Gradient descent has converted, exiting early after {0} iterations".format(iteration))
+            print("Gradient descent has converged, exiting early after {0} iterations".format(iteration))
             break
 
         prev_validation_cost = validation_cost
