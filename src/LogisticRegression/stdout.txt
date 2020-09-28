@@ -1,0 +1,50 @@
+Number of features: 7
+Train set size: 300
+Validation set size: 100
+Test set size: 100
+Training with momentum=0.2, max_iterations=100000, learning_rate=0.001, epsilon=1e-07
+Iteration: 0, train Accuracy: 0.7333333333333333, Validation Accuracy: 0.63
+Iteration: 1000, train Accuracy: 0.9033333333333333, Validation Accuracy: 0.86
+Iteration: 2000, train Accuracy: 0.8933333333333333, Validation Accuracy: 0.9
+Iteration: 3000, train Accuracy: 0.8966666666666666, Validation Accuracy: 0.9
+Iteration: 4000, train Accuracy: 0.9, Validation Accuracy: 0.9
+Iteration: 5000, train Accuracy: 0.9033333333333333, Validation Accuracy: 0.91
+Iteration: 6000, train Accuracy: 0.9033333333333333, Validation Accuracy: 0.91
+Iteration: 7000, train Accuracy: 0.9033333333333333, Validation Accuracy: 0.91
+Iteration: 8000, train Accuracy: 0.9066666666666666, Validation Accuracy: 0.91
+Iteration: 9000, train Accuracy: 0.91, Validation Accuracy: 0.91
+Iteration: 10000, train Accuracy: 0.91, Validation Accuracy: 0.94
+Iteration: 11000, train Accuracy: 0.92, Validation Accuracy: 0.93
+Iteration: 12000, train Accuracy: 0.9233333333333333, Validation Accuracy: 0.92
+Iteration: 13000, train Accuracy: 0.9233333333333333, Validation Accuracy: 0.93
+Iteration: 14000, train Accuracy: 0.9233333333333333, Validation Accuracy: 0.93
+Iteration: 15000, train Accuracy: 0.9233333333333333, Validation Accuracy: 0.93
+Iteration: 16000, train Accuracy: 0.9233333333333333, Validation Accuracy: 0.93
+Iteration: 17000, train Accuracy: 0.9266666666666666, Validation Accuracy: 0.93
+Iteration: 18000, train Accuracy: 0.9266666666666666, Validation Accuracy: 0.93
+Iteration: 19000, train Accuracy: 0.93, Validation Accuracy: 0.93
+Iteration: 20000, train Accuracy: 0.9333333333333333, Validation Accuracy: 0.93
+Iteration: 21000, train Accuracy: 0.9366666666666666, Validation Accuracy: 0.93
+Iteration: 22000, train Accuracy: 0.9366666666666666, Validation Accuracy: 0.93
+Iteration: 23000, train Accuracy: 0.9366666666666666, Validation Accuracy: 0.93
+Iteration: 24000, train Accuracy: 0.9366666666666666, Validation Accuracy: 0.93
+Iteration: 25000, train Accuracy: 0.9366666666666666, Validation Accuracy: 0.93
+Iteration: 26000, train Accuracy: 0.9366666666666666, Validation Accuracy: 0.93
+Iteration: 27000, train Accuracy: 0.9433333333333334, Validation Accuracy: 0.93
+Iteration: 28000, train Accuracy: 0.9433333333333334, Validation Accuracy: 0.93
+Iteration: 29000, train Accuracy: 0.9433333333333334, Validation Accuracy: 0.93
+Iteration: 30000, train Accuracy: 0.9433333333333334, Validation Accuracy: 0.93
+Iteration: 31000, train Accuracy: 0.9433333333333334, Validation Accuracy: 0.93
+Iteration: 32000, train Accuracy: 0.9433333333333334, Validation Accuracy: 0.93
+Iteration: 33000, train Accuracy: 0.9433333333333334, Validation Accuracy: 0.93
+Iteration: 34000, train Accuracy: 0.9433333333333334, Validation Accuracy: 0.93
+Iteration: 35000, train Accuracy: 0.9433333333333334, Validation Accuracy: 0.93
+Iteration: 36000, train Accuracy: 0.9433333333333334, Validation Accuracy: 0.93
+Iteration: 37000, train Accuracy: 0.9433333333333334, Validation Accuracy: 0.93
+Iteration: 38000, train Accuracy: 0.9433333333333334, Validation Accuracy: 0.93
+Gradient descent has converted, exiting early after 38484 iterations
+Last Train Cost: 0.15620522162459038
+Last Train Accuracy: 0.9433333333333334
+Last Validation Cost: 0.18202590393750662
+Last Validation Accuracy: 0.93
+Test Set Accuracy: 0.98

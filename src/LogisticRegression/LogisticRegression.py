@@ -10,7 +10,7 @@ def augment_with_intercept(dataset):
     return np.insert(dataset, 0, np.ones(shape=(1, dataset.shape[1])))
 
 def get_initialized_weights(size):
-    return np.zeros(shape=(size, 1))
+    return np.random.uniform(low=0.0, high=1.0, size=(size, 1))
 
 def predict(dataset, weights):
     return np.rint(get_activation(dataset, weights))
@@ -20,13 +20,14 @@ def get_activation(dataset, weights):
 
 def get_cost(labels, activation):
     sample_size = labels.shape[1]
+    # we add float epsilon to handle activation being 0
     return np.sum(labels * np.log(activation + sys.float_info.epsilon) + (1 - labels) * np.log(1 - activation + sys.float_info.epsilon)) / -sample_size
 
 def get_weight_gradient(labels, activation, dataset):
     sample_size = labels.shape[1]
     return np.dot(dataset, (activation - labels).T) / sample_size
 
-def train(train_set, train_labels, validation_set, validation_labels, momentum=0.2, max_iterations=1000000, learning_rate=0.001, epsilon=0.0000001):
+def train(train_set, train_labels, validation_set, validation_labels, momentum=0.2, max_iterations=100000, learning_rate=0.001, epsilon=0.0000001):
     print("Training with momentum={0}, max_iterations={1}, learning_rate={2}, epsilon={3}".format(momentum, max_iterations, learning_rate, epsilon))
     weights = get_initialized_weights(train_set.shape[0])
     prev_update_vector = None
