@@ -32,9 +32,7 @@ def train(dataset, labels, momentum=0.9, max_iterations=100000, learning_rate=0.
     costs = []
     prev_update_vector = None
     prev_cost = None
-    iteration = 0
-
-    for _ in range(max_iterations):
+    for iteration in range(max_iterations):
         # forward propagation
         activation = get_activation(dataset, weights)
         cost = get_cost(labels, activation)
@@ -55,7 +53,6 @@ def train(dataset, labels, momentum=0.9, max_iterations=100000, learning_rate=0.
             break
 
         prev_cost = cost
-        iteration += 1
     return weights, costs
 
 def load_data(file_path):
