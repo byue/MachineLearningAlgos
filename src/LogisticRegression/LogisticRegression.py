@@ -26,20 +26,36 @@ def get_weight_gradient(labels, activation, dataset):
     sample_size = labels.shape[1]
     return np.dot(dataset, (activation - labels).T) / sample_size
 
-def train(dataset, labels, momentum=0.9, max_iterations=100000, learning_rate=0.1, epsilon=0.000001):
+def train(train_set, train_labels, validation_set, validation_labels, momentum=0.2, max_iterations=1000000, learning_rate=0.001, epsilon=0.0000001):
     print("Training with momentum={0}, max_iterations={1}, learning_rate={2}, epsilon={3}".format(momentum, max_iterations, learning_rate, epsilon))
-    weights = get_initialized_weights(dataset.shape[0])
-    costs = []
+    weights = get_initialized_weights(train_set.shape[0])
     prev_update_vector = None
-    prev_cost = None
+    train_costs = []
+    validation_costs = []
+    train_accuracies = []
+    validation_accuracies = []
+    prev_validation_cost = None
+
     for iteration in range(max_iterations):
+        # Check accuracy
+        validation_accuracy = get_accuracy(predict(validation_set, weights), validation_labels)
+        train_accuracy = get_accuracy(predict(train_set, weights), train_labels)
+        train_accuracies.append(train_accuracy)
+        validation_accuracies.append(validation_accuracy)
+
+        if iteration % 1000 == 0:
+            print("Iteration: {0}, train Accuracy: {1}, Validation Accuracy: {2}".format(iteration, train_accuracy, validation_accuracy))
+
         # forward propagation
-        activation = get_activation(dataset, weights)
-        cost = get_cost(labels, activation)
-        costs.append(cost)
+        train_activation = get_activation(train_set, weights)
+        train_cost = get_cost(train_labels, train_activation)
+        train_costs.append(train_cost)
+
+        validation_cost = get_cost(validation_labels, get_activation(validation_set, weights))
+        validation_costs.append(validation_cost)
 
         # backward propagation
-        update_vector = learning_rate * get_weight_gradient(labels, activation, dataset)
+        update_vector = learning_rate * get_weight_gradient(train_labels, train_activation, train_set)
 
         # update weights
         if prev_update_vector is not None:
@@ -48,12 +64,12 @@ def train(dataset, labels, momentum=0.9, max_iterations=100000, learning_rate=0.
         weights = weights - update_vector
 
         # Check if we have converged
-        if prev_cost is not None and abs(prev_cost - cost) < epsilon:
+        if prev_validation_cost is not None and abs(prev_validation_cost - validation_cost) < epsilon:
             print("Gradient descent has converted, exiting early after {0} iterations".format(iteration))
             break
 
-        prev_cost = cost
-    return weights, costs
+        prev_validation_cost = validation_cost
+    return weights, train_costs, train_accuracies, validation_costs, validation_accuracies
 
 def load_data(file_path):
     return pd.read_csv(file_path, sep=',', header=0)
@@ -80,47 +96,68 @@ def preprocess_data(df):
     dataset[-1] = np.rint(dataset[-1])[np.newaxis]
     return dataset, features
 
-def split_dataset(dataset, percent_train=60, shuffle=True):
-    if shuffle:
-        np.random.shuffle(dataset.T)
-
+def split_dataset(dataset, percent_train=60, percent_validation=20):
     num_samples = dataset.shape[1]
     num_train = num_samples * percent_train // 100
+    num_validation = num_samples * percent_validation // 100
 
-    train_chunk = dataset[:,:num_train]
+    end_of_train = num_train
+    end_of_validation = num_train + num_validation
+
+    train_chunk = dataset[:,:end_of_train]
     train_set = train_chunk[:-1]
     train_labels = train_chunk[-1][np.newaxis]
+    
+    validation_chunk = dataset[:,end_of_train:end_of_validation]
+    validation_set = validation_chunk[:-1]
+    validation_labels = validation_chunk[-1][np.newaxis]
 
-    test_chunk = dataset[:,num_train:]
+    test_chunk = dataset[:,end_of_validation:]
     test_set = test_chunk[:-1]
     test_labels = test_chunk[-1][np.newaxis]
 
-    return train_set, train_labels, test_set, test_labels
+    return train_set, train_labels, validation_set, validation_labels, test_set, test_labels
 
 def get_accuracy(predictions, labels):
     num_correct = (predictions[0] == labels[0]).sum()
     accuracy = float(num_correct) / labels.shape[1]
     return accuracy
 
+def plot_costs(train_costs, train_accuracies, validation_costs, validation_accuracies):
+    plt.plot(train_costs, label="Train Loss")
+    plt.plot(train_accuracies, label="Train Accuracy")
+    plt.plot(validation_costs, label="Validation Loss")
+    plt.plot(validation_accuracies, label="Validation Accuracy")
+    plt.legend()
+    plt.show()
+
 def main():
     dataset, features = preprocess_data(load_data('admissionsData.txt'))
 
-    train_set, train_labels, test_set, test_labels = split_dataset(dataset)
+    # sets are m x n matrices where m is number features + bias, n is number samples
+    # first row is all 1's to accomodate biases
+    train_set, train_labels, validation_set, validation_labels, test_set, test_labels = split_dataset(dataset)
 
     print("Number of features: {0}".format(len(features)))
     print("Train set size: {0}".format(train_set.shape[1]))
+    print("Validation set size: {0}".format(validation_set.shape[1]))
     print("Test set size: {0}".format(test_set.shape[1]))
 
-    weights, costs = train(train_set, train_labels)
+    weights, train_costs, train_accuracies, validation_costs, validation_accuracies = train(train_set, train_labels, validation_set, validation_labels)
 
-    predictions = predict(test_set, weights)
+    print("Last Train Cost: {0}".format(train_costs[-1]))
+    print("Last Train Accuracy: {0}".format(train_accuracies[-1]))
+    print("Last Validation Cost: {0}".format(validation_costs[-1]))
+    print("Last Validation Accuracy: {0}".format(validation_accuracies[-1]))
 
-    accuracy = get_accuracy(predictions, test_labels)
+    # Evaludate Test Set
+    test_predictions = predict(test_set, weights)
+    test_accuracy = get_accuracy(test_predictions, test_labels)
+    print("Test Set Accuracy: {0}".format(test_accuracy))
 
-    print("Accuracy: {0}".format(accuracy))
+    # Plot loss curves for train and validation set
+    plot_costs(train_costs, train_accuracies, validation_costs, validation_accuracies)
 
-    plt.plot(costs)
-    plt.show()
 
 if __name__ == "__main__":
     main()
